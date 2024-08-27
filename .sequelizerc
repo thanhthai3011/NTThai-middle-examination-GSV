@@ -1,0 +1,8 @@
+const { resolve } = require("path");
+
+module.exports = {
+    config: resolve("src", "infra", "sequelize", "config", "config.js"),
+    "migrations-path": resolve("src", "infra", "sequelize", "migrations"),
+    "models-path": resolve("src", "infra", "sequelize", "models"),
+    "seeders-path": resolve("src", "infra", "sequelize", "seeders"),
+};
