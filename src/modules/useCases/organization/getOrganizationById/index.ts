@@ -1,7 +1,9 @@
-import { benefitRepo } from "../../../repos/index.repo";
-import { GetBenefitByIdController } from "./get_organization_by_id.controller";
-import { GetBenefitById } from "./get_organization_by_id.usecase";
+import { organizationRepo } from "../../../repos/index.repo";
+import { GetOrganizationByIdController } from "./get_organization_by_id.controller";
+import { GetOrganizationById } from "./get_organization_by_id.usecase";
 
-const getBenefitByIdController = new GetBenefitByIdController(new GetBenefitById(benefitRepo));
+const getOrganizationByIdController = new GetOrganizationByIdController(
+  new GetOrganizationById(organizationRepo)
+);
 
-export { getBenefitByIdController };
+export { getOrganizationByIdController };

@@ -5,3 +5,5 @@ global.NODE_ENV = "development";
 // Infra
 import "./infra/express/app";
 import "./infra/sequelize";
+
+import "./modules/useCases/cronJob/index";

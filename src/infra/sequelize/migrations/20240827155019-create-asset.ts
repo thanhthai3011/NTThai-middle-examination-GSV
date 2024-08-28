@@ -9,17 +9,17 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
-        type: Sequelize.STRING(254),
-      },
       type: {
         type: Sequelize.STRING(254),
       },
-      serial_number: {
+      serial: {
         type: Sequelize.STRING(254),
       },
       status: {
         type: Sequelize.STRING(20),
+      },
+      description: {
+        type: Sequelize.STRING(4000),
       },
       created_by: {
         type: Sequelize.STRING(20),

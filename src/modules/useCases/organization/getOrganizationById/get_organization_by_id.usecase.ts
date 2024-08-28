@@ -1,72 +1,48 @@
 import { UseCase } from "../../../../core/domain/UseCase";
 import { GenericAppError } from "../../../../core/logic/AppError";
 import { Either, right, Result, left } from "../../../../core/logic/Result";
-import Logger from "../../../../utils/logger";
-import { Benefit } from "../../../domain/benefit/benefit.domain";
 import { UseCaseError } from "../../../../core/logic/UseCaseError";
-import { IBenefitRepo } from "../../../repos/interface/benefit.interface";
-import { BenefitMap } from "../../../mappers/benefit.map";
-import { BenefitDTO, BenefitIdDTO } from "../../../dtos/benefit.dto";
-import { CommonErrors } from "../../../errors/common.errors";
+import { IOrganizationRepo } from "../../../repos/interface/organization.interface";
+import {
+  OrganizationDTO,
+  OrganizationIdDTO,
+} from "../../../dtos/organization.dto";
+import { CommonErrors } from "../../errors/common.errors";
 import models from "../../../../infra/sequelize/models";
 
 type Response = Either<GenericAppError.UnexpectedError, any>;
 
-class GetBenefitById implements UseCase<any, Response> {
-    private readonly _benefitRepo: IBenefitRepo;
+class GetOrganizationById implements UseCase<any, Response> {
+  private readonly _organizationRepo: IOrganizationRepo;
 
-    constructor(benefitRepo: IBenefitRepo) {
-        this._benefitRepo = benefitRepo;
+  constructor(organizationRepo: IOrganizationRepo) {
+    this._organizationRepo = organizationRepo;
+  }
+
+  private async handleOrganizationOrError(
+    id: string
+  ): Promise<any | Result<UseCaseError>> {
+    const organization = await this._organizationRepo.findById(id);
+    if (!organization) {
+      return new CommonErrors.FieldIdNotFound("Id");
+    }
+    return organization;
+  }
+
+  public async execute(req): Promise<any> {
+    console.log(`BEGIN >> Params ${JSON.stringify(req.params)}`);
+    const { id }: OrganizationIdDTO = { ...req.params };
+
+    const organizationOrError: any | Result<UseCaseError> =
+      await this.handleOrganizationOrError(id);
+    if (organizationOrError["isFailure"]) {
+      return left(organizationOrError);
     }
 
-    private async handleBenefitOrError(id: string): Promise<Benefit | Result<UseCaseError>> {
-        const benefit = await this._benefitRepo.findOne({
-            where: { be_id: id },
-            paranoid: true,
-            include: [
-                {
-                    model: models.BenefitType,
-                    require: false,
-                    as: "benefitType",
-                    attributes: ["bt_name"],
-                },
-                {
-                    model: models.VoucherDefinition,
-                    require: false,
-                    as: "voucherDefinition",
-                    attributes: ["vd_name"],
-                },
-                {
-                    model: models.LoyaltyPromotion,
-                    require: false,
-                    as: "loyaltyPromotion",
-                    attributes: ["lpm_name"]
-                }
-            ],
-        });
-        if (!benefit) {
-            return new CommonErrors.NotFound("Id");
-        }
-        return benefit;
-    }
+    console.log(`END << Result ${JSON.stringify(organizationOrError)}`);
 
-    public async execute(req): Promise<any> {
-        Logger.info(`BEGIN >> Params ${JSON.stringify(req.params)}`);
-        const { id }: BenefitIdDTO = { ...req.params };
-
-        const benefitOrError: Benefit | Result<UseCaseError> = await this.handleBenefitOrError(id);
-        if (benefitOrError["isFailure"]) {
-            return left(benefitOrError);
-        }
-
-        Logger.info(`END << Result ${JSON.stringify(benefitOrError)}`);
-        benefitOrError["benefit_type_name"] = benefitOrError?.["benefitType"]?.["bt_name"] ?? null;
-        benefitOrError["voucher_definition_name"] = benefitOrError?.["voucherDefinition"]?.["vd_name"] ?? null;
-        benefitOrError["loyalty_promotion_name"] = benefitOrError?.["loyaltyPromotion"]?.["lpm_name"] ?? null;
-        const benefitDTO: BenefitDTO = BenefitMap.toDTO(benefitOrError as Benefit);
-
-        return right(Result.ok(benefitDTO));
-    }
+    return right(Result.ok(organizationOrError));
+  }
 }
 
-export { GetBenefitById };
+export { GetOrganizationById };

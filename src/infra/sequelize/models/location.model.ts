@@ -14,8 +14,8 @@ module.exports = function (sequelize, DataTypes) {
             name: {
                 type: DataTypes.STRING(254),
             },
-            address: {
-                type: DataTypes.STRING(4000),
+            status: {
+                type: DataTypes.STRING(20),
             },
             created_by: {
                 type: DataTypes.STRING(20),
@@ -47,7 +47,7 @@ module.exports = function (sequelize, DataTypes) {
     );
 
     Location.associate = function (models) {
-        Location.belongTo(models.Organization, {
+        Location.belongsTo(models.Organization, {
             foreignKey: "organization_id",
             as: "organization"
         })

@@ -1,22 +1,21 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../core/infra/BaseController";
-import { GetBenefitPages } from "./get_organizations.usecase";
-import { Benefit } from "../../../domain/benefit/benefit.domain";
+import { GetOrganizationPages } from "./get_organizations.usecase";
 
-export class GetBenefitPagesController extends BaseController {
-    private useCase: GetBenefitPages;
+export class GetOrganizationPagesController extends BaseController {
+  private useCase: GetOrganizationPages;
 
-    constructor(useCase: GetBenefitPages) {
-        super();
-        this.useCase = useCase;
+  constructor(useCase: GetOrganizationPages) {
+    super();
+    this.useCase = useCase;
+  }
+  async executeImpl(req: Request, res: Response): Promise<any> {
+    const result = await this.useCase.execute(req, res);
+    if (result.isRight()) {
+      const organizations: Array<any> = await result.value.getValue();
+      return this.ok(res, organizations);
     }
-    async executeImpl(req: Request, res: Response): Promise<any> {
-        const result = await this.useCase.execute(req, res);
-        if (result.isRight()) {
-            const benefits: Array<Benefit> = await result.value.getValue();
-            return this.ok(res, benefits);
-        }
-        const { message } = result.value.getErrorValue();
-        return this.clientError(res, message);
-    }
+    const { message } = result.value.getErrorValue();
+    return this.clientError(res, message);
+  }
 }

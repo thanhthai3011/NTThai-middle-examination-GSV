@@ -1,7 +1,9 @@
-import { benefitTypeRepo, benefitRepo, voucherDefinitionRepo, loyaltyPromotionRepo } from "../../../repos/index.repo";
-import { CreateBenefitController } from "./create_benefit.controller";
-import { CreateBenefit } from "./create_benefit.usecase";
+import { organizationRepo } from "../../../repos/index.repo";
+import { CreateOrganizationController } from "./create_organization.controller";
+import { CreateOrganization } from "./create_organization.usecase";
 
-const createBenefitController = new CreateBenefitController(new CreateBenefit(benefitRepo, benefitTypeRepo, voucherDefinitionRepo, loyaltyPromotionRepo));
+const createOrganizationController = new CreateOrganizationController(
+  new CreateOrganization(organizationRepo)
+);
 
-export { createBenefitController };
+export { createOrganizationController };

@@ -12,8 +12,8 @@ module.exports = {
       name: {
         type: Sequelize.STRING(254),
       },
-      address: {
-        type: Sequelize.STRING(4000),
+      status: {
+        type: Sequelize.STRING(20),
       },
       created_by: {
         type: Sequelize.STRING(20),

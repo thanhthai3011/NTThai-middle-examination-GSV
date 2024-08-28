@@ -1,7 +1,7 @@
-import { benefitRepo } from "../../../repos/index.repo";
-import { GetBenefitPagesController } from "./get_benefits.controller";
-import { GetBenefitPages } from "./get_benefits.usecase";
+import { organizationRepo } from "../../../repos/index.repo";
+import { GetOrganizationPagesController } from "./get_organizations.controller";
+import { GetOrganizationPages } from "./get_organizations.usecase";
 
-const getBenefitPagesController = new GetBenefitPagesController(new GetBenefitPages(benefitRepo));
+const getOrganizationPagesController = new GetOrganizationPagesController(new GetOrganizationPages(organizationRepo));
 
-export { getBenefitPagesController };
+export { getOrganizationPagesController };

@@ -6,9 +6,6 @@ export abstract class BaseController {
     public handleSequelizeUniqueConstraintError(res: express.Response, err: any){
         const { parent, errors } = err;
         switch (errors[0].path) {
-            case "tu_email":
-                this.conflict(res, `${errors[0].path} has taken`);
-                break;
             default:
                 this.conflict(res, `${errors[0].path} has taken`);
                 break;
@@ -17,15 +14,6 @@ export abstract class BaseController {
 
     public handleSequelizeForeignKeyConstraintError(res: express.Response, err: any){
         const { parent } = err;
-        if (parent?.detail.indexOf("bu_type") !== -1) {
-            return this.clientError(res, "This type id is not present in table");
-        }
-        if (parent?.detail.indexOf("tu_role_id") !== -1) {
-            return this.clientError(res, "This role id is not present in table");
-        }
-        if (parent?.detail.indexOf("c_business_id") !== -1) {
-            return this.clientError(res, "This business id is not present in table");
-        }
         return  this.clientError(res, parent?.detail || err);
     }
 
@@ -35,7 +23,6 @@ export abstract class BaseController {
         } catch (err) {
             console.log(`[BaseController]: Uncaught controller error`);
             console.log(err);
-            Logger.info(`Error ${JSON.stringify(err)}`);
 
             const { parent } = err;
             switch (parent?.code) {
@@ -50,14 +37,14 @@ export abstract class BaseController {
                     this.handleSequelizeForeignKeyConstraintError(res, err);
                     break;
                 case "42703":
-                    this.clientError(res, "Attempted to access a non-existent column. Please check the column name and table schema." || err);
+                    this.clientError(res, "Attempted to access a non-existent column. Please check the column name and table schema.");
                     break;
                 case "22007": 
                     // name: SequelizeDatabaseError
                     // 22007: invalid_datetime_format
                     // Cú pháp truy vấn SQL không đúng.
                     // Lỗi trong cấu hình kết nối cơ sở dữ liệu.
-                    this.clientError(res, "Invalid date format" || err);
+                    this.clientError(res, "Invalid date format");
                     break;
                 default:
                     this.clientError(res, parent?.detail || err);

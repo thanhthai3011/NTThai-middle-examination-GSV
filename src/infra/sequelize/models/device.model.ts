@@ -53,7 +53,7 @@ module.exports = function (sequelize, DataTypes) {
   );
 
   Device.associate = function (models) {
-    Device.belongTo(models.Location, {
+    Device.belongsTo(models.Location, {
       foreignKey: "location_id",
       as: "location",
     });

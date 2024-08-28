@@ -2,7 +2,8 @@ export interface AssetBodyDTO {
     id?: number;
     name: string;
     type: string;
-    serial_number: string;
+    location_id: string;
+    serial: string;
     status: string;
     created_by?: string;
     created_at?: Date;
@@ -15,7 +16,8 @@ export interface AssetDTO {
     id?: number;
     name: string;
     type: string;
-    serial_number: string;
+    location_id: string;
+    serial: string;
     status: string;
     created_by?: string;
     created_at?: Date;

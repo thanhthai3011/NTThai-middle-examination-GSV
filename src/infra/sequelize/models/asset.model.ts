@@ -11,17 +11,17 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      name: {
-        type: DataTypes.STRING(254),
-      },
       type: {
         type: DataTypes.STRING(254),
       },
-      serial_number: {
+      serial: {
         type: DataTypes.STRING(254),
       },
       status: {
         type: DataTypes.STRING(20),
+      },
+      description: {
+        type: DataTypes.STRING(4000),
       },
       created_by: {
         type: DataTypes.STRING(20),
@@ -53,7 +53,7 @@ module.exports = function (sequelize, DataTypes) {
   );
 
   Asset.associate = function (models) {
-    Asset.belongTo(models.Location, {
+    Asset.belongsTo(models.Location, {
       foreignKey: "location_id",
       as: "location",
     });
